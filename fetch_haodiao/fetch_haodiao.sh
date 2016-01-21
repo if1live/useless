@@ -25,7 +25,7 @@ mkdir $num
 cd $num
 
 tmp_file="tmp.html"
-curl $URL > $tmp_file
+curl $URL > $tmp_file 2> /dev/null
 
 idx=$((base_idx+1))
 for url in $(grep "http://haodiao.org/wp-content/gallery/" $tmp_file | grep -v "/thumbs/" | cut -d'"' -f2|sort|uniq); do
@@ -33,7 +33,7 @@ for url in $(grep "http://haodiao.org/wp-content/gallery/" $tmp_file | grep -v "
 	ext=$(echo $url | rev | cut -d. -f1 | rev)
 	filename=$name.$ext
 
-	curl $url > $filename
+	curl $url > $filename 2> /dev/null
 
 	idx=$((idx+1))
 done
