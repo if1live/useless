@@ -9,6 +9,8 @@ if [[ $URL == "" ]]; then
 	exit
 fi
 
+tmp_file="$(date "+%Y%m%d%H%M%S").html"
+
 num=$(echo $URL | cut -d/ -f5 | cut -d. -f1)
 
 last_token=$(echo $URL | rev | cut -d/ -f1 | rev)
@@ -21,10 +23,9 @@ fi
 
 base_idx=$(($page*30))
 
-mkdir $num
+mkdir -p $num
 cd $num
 
-tmp_file="tmp.html"
 curl $URL > $tmp_file 2> /dev/null
 
 idx=$((base_idx+1))
