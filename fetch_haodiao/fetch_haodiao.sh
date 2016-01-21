@@ -16,7 +16,18 @@ cd $num
 
 tmp_file="tmp.html"
 curl $URL > $tmp_file
-$(grep "http://haodiao.org/wp-content/gallery/" $tmp_file | grep -v "/thumbs/" | cut -d'"' -f2|sort|uniq|awk '{print "wget -N " $1}')
+
+idx=1
+for url in $(grep "http://haodiao.org/wp-content/gallery/" $tmp_file | grep -v "/thumbs/" | cut -d'"' -f2|sort|uniq); do
+	name=$(printf "%04d" $idx)
+	ext=$(echo $url | rev | cut -d. -f1 | rev)
+	filename=$name.$ext
+
+	curl $url > $filename
+
+	idx=$((idx+1))
+done
+
 rm $tmp_file
 
 cd ..
