@@ -11,13 +11,23 @@ fi
 
 num=$(echo $URL | cut -d/ -f5 | cut -d. -f1)
 
+last_token=$(echo $URL | rev | cut -d/ -f1 | rev)
+echo $last_token | grep ".html"
+if [[ $? == 0 ]]; then
+	page=0
+else
+	page=$(($last_token-1))
+fi
+
+base_idx=$(($page*30))
+
 mkdir $num
 cd $num
 
 tmp_file="tmp.html"
 curl $URL > $tmp_file
 
-idx=1
+idx=$((base_idx+1))
 for url in $(grep "http://haodiao.org/wp-content/gallery/" $tmp_file | grep -v "/thumbs/" | cut -d'"' -f2|sort|uniq); do
 	name=$(printf "%04d" $idx)
 	ext=$(echo $url | rev | cut -d. -f1 | rev)
